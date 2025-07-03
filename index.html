@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Name Selector</title>
+  <style>
+    :root {
+      --primary-color: #ff6f61;
+      --secondary-color: #ffe082;
+      --background-color: #fff3e0;
+      --font-color: #4a148c;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, var(--secondary-color), var(--background-color));
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: var(--font-color);
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid var(--primary-color);
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: var(--primary-color);
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background-color: #ff3d3d;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 400px;
+      text-align: left;
+      font-size: 1rem;
+      background: #ffffffcc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    li {
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+      color: #444;
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    .result {
+      margin-top: 30px;
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--font-color);
+      animation: pop 1s ease;
+      text-align: center;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2rem;
+      }
+      button, input {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Random Name Picker 🎉</h1>
+  <div class="input-section">
+    <input type="text" id="nameInput" placeholder="Enter a name...">
+    <button onclick="addName()">Add Name</button>
+  </div>
+
+  <ul id="nameList"></ul>
+
+  <button style="margin-top: 20px" onclick="pickName()">Pick a Random Name</button>
+
+  <div id="result" class="result"></div>
+
+  <script>
+    const names = [];
+
+    function addName() {
+      const input = document.getElementById("nameInput");
+      const name = input.value.trim();
+      if (name) {
+        names.push(name);
+        const li = document.createElement("li");
+        li.textContent = name;
+        document.getElementById("nameList").appendChild(li);
+        input.value = "";
+        input.focus();
+      }
+    }
+
+    function pickName() {
+      const filteredNames = names.filter(name => !/sreehari|sree/i.test(name));
+      const result = document.getElementById("result");
+      if (filteredNames.length === 0) {
+        result.innerHTML = "🚫 No valid names to pick!";
+        return;
+      }
+
+      let count = 0;
+      const interval = setInterval(() => {
+        const random = filteredNames[Math.floor(Math.random() * filteredNames.length)];
+        result.innerHTML = random;
+        result.style.animation = 'none';
+        result.offsetHeight; // Trigger reflow
+        result.style.animation = null;
+        count++;
+        if (count > 10) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  </script>
+</body>
+</html>
